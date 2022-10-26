@@ -1,57 +1,60 @@
 import sys
 import math
+from collections import *
 
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
 
 # n: the total number of nodes in the level, including the gateways
-# l: the number of links (=edges)
-# link_list : the list ok all links between nodes
+# l: the number of links
 # e: the number of exit gateways
-# gateways_list : the list of gateways to isole
 
 n, l, e = [int(i) for i in input().split()]
 
-link_list = []
+link_dict = {}
+for i in range(n) :
+    link_dict[i] = []
+
 for i in range(l):
     # n1: N1 and N2 defines a link between these nodes
     n1, n2 = [int(j) for j in input().split()]
-    link_list.append([n1, n2])
+    link_dict[n1].append(n2)
+    link_dict[n2].append(n1)
+#print(link_dict)
 
+# Gateways list
 gateways_list = []
 for i in range(e):
     ei = int(input())  # the index of a gateway node
     gateways_list.append(ei)
 
-# Test
-# print("Nb nodes : ", n, " --- nb and list of links :", l, link_list, " --- nb and list of gateways :", e, gateways_list)
+# Breath First Search algo
+def iterative_bfs(graph, start) : 
+    # graph : a graph within a dict() format
+    # start : the node to start
+    visited = []
+    line = deque()
+    line.append(start)
+    while line :
+        node = line.popleft()
+        if node not in visited :
+            visited.append(node)
+            unvisited = [n for n in graph[node] if n not in visited]
+            line.extend(unvisited)           
+        for j in unvisited : 
+            if j in gateways_list :
+                gate = j
+                return(node, gate)
+    return(node)
 
-# game loop ***********************************************************************************************************
+# game loop
 while True:
     si = int(input())  # The index of the node on which the Bobnet agent is positioned this turn
 
-    # create link list from de bobnet agent's position
-    link_from_bobA_list = []
-    for l in link_list :
-            if l[0] == si :
-                link_from_bobA_list.append(l)
-            if l[1] == si :
-                l_sorted = [l[1], l[0]]
-                link_from_bobA_list.append(l_sorted)
-    link_from_bobA_list = sorted(link_from_bobA_list, key=lambda x : x[1])
+    first_exit_found = iterative_bfs(link_dict, si)
 
-    #print("list of links from bobnet agent's position :", link_from_bobA_list)
+    print(first_exit_found[0], first_exit_found[1])
 
-    # Determine a link to cut
-    link_to_cut = link_from_bobA_list[0]
 
-    for linkbob in link_from_bobA_list :
-        if linkbob[1] in gateways_list : 
-            link_to_cut = linkbob
 
-    # Instruction for the lap
-    print(link_to_cut[0], link_to_cut[1])
-
-    # Write an action using print
-    # To debug: print("Debug messages...", file=sys.stderr, flush=True)
 
