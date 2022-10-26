@@ -56,7 +56,12 @@ while True:
     si = int(input())  # The index of the node on which the Bobnet agent is positioned this turn
 
     # Determine a link to cut
-    link_to_cut = []
+    link_to_cut = [0, 0]
+
+    """
+    This methode works for only 60% of tests, 
+    Breadth-first search algo is not enough, let's explorate *** Depth-first search ***
+
     for i in range(len(targeted_link_list)) : 
         if si in targeted_link_list[i] :                # if bob is on a node links with a gateways
             link_to_cut = targeted_link_list[i]
@@ -74,7 +79,7 @@ while True:
         strategical_link_list = sorted(strategical_link_list, key=lambda x : x[1], reverse=True)
     # Test
     #print(link_to_cut, strategical_link_list)
-
+    """
     # Instruction for the lap
     print(link_to_cut[0], link_to_cut[1])
 
