@@ -1,8 +1,7 @@
-import sys
-from math import *
-from collections import *
+graph = {0: [[10, 1], [1, 1], [6, 1], [9, 1], [11, 1], [7, 1]], 1: [[0, 1], [2, 1], [4, 1], [6, 1], [7, 1], [3, 1]], 2: [[5, 1], [35, 1], [1, 1], [3, 1], [4, 1], [34, 1], [33, 1]], 3: [[8, 1], [33, 1], [2, 1], [19, 1], [20, 1], [1, 1]], 4: [[1, 1], [5, 1], [2, 1], [6, 1]], 5: [[2, 1], [35, 1], [4, 1]], 6: [[1, 1], [4, 1], [11, 1], [12, 1], [0, 1]], 7: [[13, 1], [1, 1], [9, 1], [0, 1], [36, 1]], 8: [[16, 1], [3, 1], [17, 1], [19, 1], [36, 1]], 9: [[14, 1], [13, 1], [10, 1], [7, 1], [0, 1]], 10: [[0, 1], [11, 1], [9, 1], [14, 1]], 11: [[12, 1], [10, 1], [6, 1], [0, 1]], 12: [[11, 1], [6, 1]], 13: [[14, 1], [16, 1], [7, 1], [15, 1], [9, 1], [36, 1]], 14: [[13, 1], [9, 1], [15, 1], [10, 1]], 15: [[13, 1], [14, 1], [24, 1], [16, 1], [23, 1]], 16: [[13, 1], [8, 1], [23, 1], [17, 1], [27, 1], [30, 1], [15, 1]], 17: [[31, 1], [16, 1], [18, 1], [8, 1], [32, 1], [19, 1]], 18: [[17, 1], [32, 1], [22, 1], [19, 1]], 19: [[21, 1], [22, 1], [20, 1], [3, 1], [17, 1], [18, 1], [8, 1]], 20: [[19, 1], [3, 1], [21, 1]], 21: [[19, 1], [20, 1], [32, 1], [22, 1]], 22: [[19, 1], [32, 1], [18, 1], [21, 1]], 23: [[16, 1], [24, 1], [25, 1], [27, 1], [15, 1]], 24: [[23, 1], [25, 1], [15, 1]], 25: [[26, 1], [23, 1], [24, 1], [27, 1]], 26: [[28, 1], [25, 1], [27, 1]], 27: [[16, 1], [26, 1], [25, 1], [29, 1], [30, 1], [23, 1], [28, 1]], 28: [[26, 1], [29, 1], [27, 1]], 29: [[30, 1], [28, 1], [27, 1]], 30: [[29, 1], [16, 1], [27, 1]], 31: [[17, 1], [32, 1]], 32: [[22, 1], [18, 1], [31, 1], [17, 1], [21, 1]], 33: [[34, 1], [3, 1], [2, 1]], 34: [[35, 1], [33, 1], [2, 1]], 35: [[5, 1], [2, 1], [34, 1]], 36: [[7, 1], [13, 1], [8, 1]]}
 
-# FUNCTIONS ***********************************************************************************************************************
+gateways_list = [0, 16, 18, 26]
+si = 3
 
 def dijkstra_dist_list(graph, initial_node) : # return a dict of shortest dist from initial node to each others
     # ARGUMENTS FORMAT : 
@@ -81,60 +80,14 @@ def gateways_count(graph, gateways_list) :
 
     return(gateways_connected)
 
-
-# GAME ****************************************************************************************************************************
-# n: the total number of nodes in the level, including the gateways
-# l: the number of links
-# e: the number of exit gateways
-
-n, l, e = [int(i) for i in input().split()]
-
-graph = {}
-for i in range(n) :
-    graph[i] = []
-
-for i in range(l):
-    n1, n2 = [int(j) for j in input().split()]
-    graph[n1].append([n2, 1])
-    graph[n2].append([n1, 1])
-#print(graph)
-
-# Gateways list
-gateways_list = []
-for i in range(e):
-    ei = int(input())  # the index of a gateway node
-    gateways_list.append(ei)
-#print(gateways_list)
+target_node_dict = gateways_count(graph, gateways_list)
+print(target_node_dict)
 
 gateways_dict = {}
 for n in gateways_list : 
     gateways_dict[n] = len(graph[n])
-#print(gateways_dict)
+print(gateways_dict)
 
-target_node_dict = gateways_count(graph, gateways_list)
+print(len(target_node_dict[17]))
 
-# game loop
-while True:
-    si = int(input())  # The index of the node on which the Bobnet agent is positioned this turn
 
-    target = []
-
-    if si in target_node_dict.keys() :
-        target = [si, target_node_dict[si][0] ]
-    else :
-        diff_mem = float('-inf')
-        n_gat_mem = 0
-        for n,v in target_node_dict.items() :
-            diff = len(target_node_dict[n]) - dist_bet_2node(graph, si, n)
-            n_gat = len(target_node_dict[n])
-            if diff >= diff_mem : #and n_gat > n_gat_mem
-                diff_mem = diff
-                n_gat_mem = n_gat
-                target = [n, v[0]]
-
-    print(target[0], target[1])
-
-    target_node_dict[target[0]].remove(target[1]) 
-    filtre_empty = {k:v for k,v in target_node_dict.items() if len(v) > 0}
-    target_node_dict = filtre_empty
-    #print(target_node_dict)
