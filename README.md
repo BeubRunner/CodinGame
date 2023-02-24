@@ -17,4 +17,4 @@ All feedbacks are very welcome !
 
 ## Links
 
-- Codingame profile page URL: [Add solution URL here](https://www.codingame.com/profile/b4fafd938abba1cb3bd137a01c0abf534686215)
+- Codingame profile page : https://www.codingame.com/profile/b4fafd938abba1cb3bd137a01c0abf534686215
