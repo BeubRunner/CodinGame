@@ -155,6 +155,8 @@ let oppPod = new opponentPod(0, 0);
 
 // game loop ---------------------------------------------------------------------------------------------------------
 while (true) {
+
+  //code from codingame
   var inputs: string[] = readline().split(" ");
   const x: number = parseInt(inputs[0]);
   const y: number = parseInt(inputs[1]);
